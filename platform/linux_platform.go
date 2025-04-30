@@ -1530,8 +1530,8 @@ func (p linux) DeleteARPEntryWithIP(ip string) error {
 	return nil
 }
 
-func (p linux) GetDefaultNetwork() (boshsettings.Network, error) {
-	return p.defaultNetworkResolver.GetDefaultNetwork()
+func (p linux) GetDefaultNetwork(ipv6 bool) (boshsettings.Network, error) {
+	return p.defaultNetworkResolver.GetDefaultNetwork(ipv6 bool)
 }
 
 func (p linux) calculateEphemeralDiskPartitionSizes(diskSizeInBytes uint64, desiredSwapSizeInBytes *uint64) (uint64, uint64, error) {

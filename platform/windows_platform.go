@@ -717,8 +717,8 @@ func (p WindowsPlatform) RemoveStaticLibraries(packageFileListPath string) error
 	return nil
 }
 
-func (p WindowsPlatform) GetDefaultNetwork() (boshsettings.Network, error) {
-	return p.defaultNetworkResolver.GetDefaultNetwork()
+func (p WindowsPlatform) GetDefaultNetwork(ipv6 bool) (boshsettings.Network, error) {
+	return p.defaultNetworkResolver.GetDefaultNetwork(ipv6)
 }
 
 func (p WindowsPlatform) GetHostPublicKey() (string, error) {

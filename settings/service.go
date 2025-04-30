@@ -255,12 +255,19 @@ func (s *settingsService) GetSettings() Settings {
 			continue
 		}
 
-		resolvedNetwork, err := s.resolveNetwork(network)
-		if err != nil {
-			break
-		}
+		s.logger.Debug(settingsServiceLogTag, "DEBUGGING NAME%s", networkName)
+		s.logger.Debug(settingsServiceLogTag, "DEBUGGING NETWORK%s", network)
+		s.logger.Debug(settingsServiceLogTag, "DEBUGGING PREFIX%s", network.prefix)
 
-		settingsCopy.Networks[networkName] = resolvedNetwork
+		if network.Prefix == "32" || network.Prefix == "128" || network.Prefix == "" {
+			resolvedNetwork, err := s.resolveNetwork(network)
+			if err != nil {
+				break
+			}
+			settingsCopy.Networks[networkName] = resolvedNetwork
+		} else {
+			settingsCopy.Networks[networkName] = network
+		}
 	}
 	return settingsCopy
 }
