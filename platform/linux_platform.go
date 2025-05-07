@@ -1531,7 +1531,7 @@ func (p linux) DeleteARPEntryWithIP(ip string) error {
 }
 
 func (p linux) GetDefaultNetwork(ipv6 bool) (boshsettings.Network, error) {
-	return p.defaultNetworkResolver.GetDefaultNetwork(ipv6 bool)
+	return p.defaultNetworkResolver.GetDefaultNetwork(ipv6)
 }
 
 func (p linux) calculateEphemeralDiskPartitionSizes(diskSizeInBytes uint64, desiredSwapSizeInBytes *uint64) (uint64, uint64, error) {
