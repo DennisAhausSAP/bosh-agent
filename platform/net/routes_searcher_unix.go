@@ -54,33 +54,17 @@ func parseRoute(ipString string) (Route, error) {
 	}, nil
 }
 
-func (s cmdRoutesSearcher) SearchRoutes() ([]Route, error) {
-	stdout, _, _, err := s.runner.RunCommandQuietly("ip", "r")
-	if err != nil {
-		return []Route{}, bosherr.WrapError(err, "Running route")
-	}
-
-	routeEntries := strings.Split(stdout, "\n")
-	routes := make([]Route, 0, len(routeEntries))
-	for _, routeEntry := range routeEntries {
-		if len(routeEntry) == 0 {
-			continue
-		}
-		route, err := parseRoute(routeEntry)
+func (s cmdRoutesSearcher) SearchRoutes(ipv6 bool) ([]Route, error) {
+	if ipv6 {
+		stdout, _, _, err := s.runner.RunCommandQuietly("ip", "-6", "r")
 		if err != nil {
-			s.logger.Warn("SearchRoutes", "parseRoute error for route '%s': %s", routeEntry, err.Error())
-			continue
+			return []Route{}, bosherr.WrapError(err, "Running IPv6 route")
 		}
-		routes = append(routes, route)
-	}
-
-	return routes, nil
-}
-
-func (s cmdRoutesSearcher) SearchIPv6Routes() ([]Route, error) {
-	stdout, _, _, err := s.runner.RunCommandQuietly("ip", "-6", "r")
-	if err != nil {
-		return []Route{}, bosherr.WrapError(err, "Running route")
+	} else {
+		stdout, _, _, err := s.runner.RunCommandQuietly("ip", "r")
+		if err != nil {
+			return []Route{}, bosherr.WrapError(err, "Running IPv4 route")
+		}
 	}
 
 	routeEntries := strings.Split(stdout, "\n")

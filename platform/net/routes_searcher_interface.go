@@ -8,8 +8,7 @@ type Route struct {
 }
 
 type RoutesSearcher interface {
-	SearchRoutes() ([]Route, error)
-	SearchIPv6Routes() ([]Route, error)
+	SearchRoutes(ipv6 bool) ([]Route, error)
 }
 
 const DefaultAddress = `0.0.0.0`

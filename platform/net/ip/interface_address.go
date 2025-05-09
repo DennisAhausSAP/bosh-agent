@@ -56,9 +56,14 @@ func (s *resolvingInterfaceAddress) GetIP() (string, error) {
 		return s.ip, nil
 	}
 
-	ip, err := s.ipResolver.GetPrimaryIPv4(s.interfaceName)
+	ip, err := s.ipResolver.GetPrimaryIP(s.interfaceName, is_ipv6)
 	if err != nil {
-		return "", bosherr.WrapError(err, "Getting primary IPv4")
+		if is_ipv6 {
+			ipVersion = 6
+		} else {
+			ipVersion = 4
+		}
+		return "", bosherr.WrapError(err, "Getting primary IPv%d", ipVersion)
 	}
 
 	s.ip = fmtIP(ip.IP)
