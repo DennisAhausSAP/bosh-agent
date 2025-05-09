@@ -56,12 +56,10 @@ func (r ipResolver) GetPrimaryIP(interfaceName string, is_ipv6 bool) (*gonet.IPN
 			}
 		}
 	}
-
+	ipVersion := 4
 	if is_ipv6 {
 		ipVersion = 6
-	} else {
-		ipVersion = 4
-	}
+	} 
 
 	return nil, bosherr.Errorf("Failed to find primary address IPv%d for interface '%s'", ipVersion, interfaceName)
 }
