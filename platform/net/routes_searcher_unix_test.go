@@ -36,7 +36,7 @@ default via 172.16.79.1 dev eth0 proto dhcp metric 100
 `,
 				})
 
-				routes, err := searcher.SearchRoutes()
+				routes, err := searcher.SearchRoutes(false)
 				Expect(err).ToNot(HaveOccurred())
 				Expect(runner.RunCommandsQuietly[0]).To(Equal([]string{"ip", "r"}))
 				Expect(routes).To(Equal([]Route{
@@ -55,7 +55,7 @@ blackhole 10.200.115.192/26  proto bird
 `,
 				})
 
-				routes, err := searcher.SearchRoutes()
+				routes, err := searcher.SearchRoutes(false)
 				Expect(err).ToNot(HaveOccurred())
 				Expect(runner.RunCommandsQuietly[0]).To(Equal([]string{"ip", "r"}))
 				Expect(routes).To(Equal([]Route{
@@ -71,7 +71,7 @@ blackhole 10.200.115.192/26  proto bird
 `,
 				})
 
-				routes, err := searcher.SearchRoutes()
+				routes, err := searcher.SearchRoutes(true)
 				Expect(err).ToNot(HaveOccurred())
 				Expect(routes).To(BeEmpty())
 			})
@@ -83,7 +83,7 @@ blackhole 10.200.115.192/26  proto bird
 					Error: errors.New("fake-run-err"),
 				})
 
-				routes, err := searcher.SearchRoutes()
+				routes, err := searcher.SearchRoutes(false)
 				Expect(err).To(HaveOccurred())
 				Expect(err.Error()).To(ContainSubstring("fake-run-err"))
 				Expect(routes).To(BeEmpty())

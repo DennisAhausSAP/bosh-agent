@@ -72,7 +72,7 @@ var _ = Describe("ipResolver", func() {
 
 				ip, err := ipResolver.GetPrimaryIPv4("fake-iface-name")
 				Expect(err).To(HaveOccurred())
-				Expect(err.Error()).To(ContainSubstring("Failed to find primary address for interface"))
+				Expect(err.Error()).To(ContainSubstring("Failed to find primary address IPv4 for interface 'fake-iface-name'"))
 				Expect(ip).To(BeNil())
 			})
 
@@ -81,7 +81,7 @@ var _ = Describe("ipResolver", func() {
 
 				ip, err := ipResolver.GetPrimaryIPv4("fake-iface-name")
 				Expect(err).To(HaveOccurred())
-				Expect(err.Error()).To(ContainSubstring("Failed to find primary address for interface"))
+				Expect(err.Error()).To(ContainSubstring("Failed to find primary address IPv4 for interface 'fake-iface-name'"))
 				Expect(ip).To(BeNil())
 			})
 		})

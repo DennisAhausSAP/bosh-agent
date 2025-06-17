@@ -4140,7 +4140,7 @@ unit: sectors
 			defaultNetwork := boshsettings.Network{IP: "1.2.3.4"}
 			fakeDefaultNetworkResolver.GetDefaultNetworkNetwork = defaultNetwork
 
-			network, err := platform.GetDefaultNetwork()
+			network, err := platform.GetDefaultNetwork(true)
 			Expect(err).ToNot(HaveOccurred())
 
 			Expect(network).To(Equal(defaultNetwork))

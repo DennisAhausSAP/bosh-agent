@@ -20,6 +20,7 @@ func NetworkInterfaceToAddrsFunc(interfaceName string) ([]gonet.Addr, error) {
 type Resolver interface {
 	// GetPrimaryIP always returns error unless IPNet is found for given interface
 	GetPrimaryIP(interfaceName string, is_ipv6 bool) (*gonet.IPNet, error)
+	GetPrimaryIPv4(interfaceName string) (*gonet.IPNet, error)
 }
 
 type ipResolver struct {
@@ -63,3 +64,8 @@ func (r ipResolver) GetPrimaryIP(interfaceName string, is_ipv6 bool) (*gonet.IPN
 
 	return nil, bosherr.Errorf("Failed to find primary address IPv%d for interface '%s'", ipVersion, interfaceName)
 }
+
+func (r ipResolver) GetPrimaryIPv4(interfaceName string) (*gonet.IPNet, error) {
+	return r.GetPrimaryIP(interfaceName, false)
+}
+

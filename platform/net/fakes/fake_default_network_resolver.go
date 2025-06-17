@@ -10,7 +10,7 @@ type FakeDefaultNetworkResolver struct {
 	GetDefaultNetworkCalled  bool
 }
 
-func (r *FakeDefaultNetworkResolver) GetDefaultNetwork() (boshsettings.Network, error) {
+func (r *FakeDefaultNetworkResolver) GetDefaultNetwork(isIpv6 bool) (boshsettings.Network, error) {
 	r.GetDefaultNetworkCalled = true
 	return r.GetDefaultNetworkNetwork, r.GetDefaultNetworkErr
 }

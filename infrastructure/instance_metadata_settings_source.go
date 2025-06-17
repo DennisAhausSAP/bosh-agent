@@ -87,5 +87,6 @@ func (s *InstanceMetadataSettingsSource) Settings() (boshsettings.Settings, erro
 			err, "Parsing instance metadata settings from %q", contents)
 	}
 
+	s.logger.Info("INFO", "Parsed settings from instance metadata: %s", contents)
 	return settings, nil
 }

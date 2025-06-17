@@ -44,13 +44,17 @@ func (r defaultNetworkResolver) GetDefaultNetwork(is_ipv6 bool) (boshsettings.Ne
 
 		ip, err := r.ipResolver.GetPrimaryIP(route.InterfaceName, is_ipv6)
 
-		if err != nil {
-			ipVersion := 4
+		ipVersion := 4
+		if is_ipv6 {
+			ipVersion = 6
+		}
 
-			if is_ipv6 {
-				ipVersion = 6
-			}
+		if err != nil {
 			return network, bosherr.WrapErrorf(err, "Getting primary IPv%d for interface '%s'", ipVersion, route.InterfaceName)
+		}
+
+		if ip == nil {
+			return network, bosherr.Errorf("Getting primary IPv%d for interface '%s'", ipVersion, route.InterfaceName)
 		}
 
 		return boshsettings.Network{

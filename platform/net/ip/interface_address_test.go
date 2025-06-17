@@ -14,23 +14,23 @@ import (
 var _ = Describe("simpleInterfaceAddress", func() {
 	Describe("GetIP", func() {
 		It("returns fully formatted IPv4", func() {
-			ipStr, err := NewSimpleInterfaceAddress("iface", "127.0.0.1").GetIP()
+			ipStr, err := NewSimpleInterfaceAddress("iface", "127.0.0.1").GetIP(false)
 			Expect(err).ToNot(HaveOccurred())
 			Expect(ipStr).To(Equal("127.0.0.1"))
 		})
 
 		It("returns fully formatted IPv6", func() {
-			ipStr, err := NewSimpleInterfaceAddress("iface", "ff00:f8::").GetIP()
+			ipStr, err := NewSimpleInterfaceAddress("iface", "ff00:f8::").GetIP(true)
 			Expect(err).ToNot(HaveOccurred())
 			Expect(ipStr).To(Equal("ff00:00f8:0000:0000:0000:0000:0000:0000"))
 
-			ipStr, err = NewSimpleInterfaceAddress("iface", "1101:2202:3303:4404:5505:6606:7707:8808").GetIP()
+			ipStr, err = NewSimpleInterfaceAddress("iface", "1101:2202:3303:4404:5505:6606:7707:8808").GetIP(true)
 			Expect(err).ToNot(HaveOccurred())
 			Expect(ipStr).To(Equal("1101:2202:3303:4404:5505:6606:7707:8808"))
 		})
 
 		It("returns error if IP cannot be parsed", func() {
-			_, err := NewSimpleInterfaceAddress("iface", "").GetIP()
+			_, err := NewSimpleInterfaceAddress("iface", "").GetIP(false)
 			Expect(err).To(HaveOccurred())
 			Expect(err.Error()).To(Equal("Cannot parse IP ''"))
 		})
@@ -58,7 +58,7 @@ var _ = Describe("resolvingInterfaceAddress", func() {
 			})
 
 			It("resolves the IP and returns fully formatted IPv4", func() {
-				ip, err := interfaceAddress.GetIP()
+				ip, err := interfaceAddress.GetIP(false)
 				Expect(err).ToNot(HaveOccurred())
 				Expect(ip).To(Equal("127.0.0.1"))
 
@@ -71,7 +71,7 @@ var _ = Describe("resolvingInterfaceAddress", func() {
 					Mask: gonet.CIDRMask(64, 128),
 				}
 
-				ip, err := interfaceAddress.GetIP()
+				ip, err := interfaceAddress.GetIP(true)
 				Expect(err).ToNot(HaveOccurred())
 				Expect(ip).To(Equal("ff00:00f8:0000:0000:0000:0000:0000:0000"))
 
@@ -81,7 +81,7 @@ var _ = Describe("resolvingInterfaceAddress", func() {
 			It("returns error if resolving IP fails", func() {
 				ipResolver.GetPrimaryIPv4Err = errors.New("fake-get-primary-ipv4-err")
 
-				ip, err := interfaceAddress.GetIP()
+				ip, err := interfaceAddress.GetIP(false)
 				Expect(err).To(HaveOccurred())
 				Expect(err.Error()).To(ContainSubstring("fake-get-primary-ipv4-err"))
 				Expect(ip).To(Equal(""))
@@ -95,14 +95,14 @@ var _ = Describe("resolvingInterfaceAddress", func() {
 					Mask: gonet.CIDRMask(16, 32),
 				}
 
-				_, err := interfaceAddress.GetIP()
+				_, err := interfaceAddress.GetIP(false)
 				Expect(err).ToNot(HaveOccurred())
 			})
 
 			It("does not attempt to resolve IP again", func() {
 				ipResolver.GetPrimaryIPv4InterfaceName = ""
 
-				ip, err := interfaceAddress.GetIP()
+				ip, err := interfaceAddress.GetIP(false)
 				Expect(err).ToNot(HaveOccurred())
 				Expect(ip).To(Equal("127.0.0.1"))
 
